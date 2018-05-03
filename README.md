@@ -39,7 +39,7 @@ Here's what it does, in order of each line of the code:
 2. `output`: specifies the name of the output file containing the text output from your program. In other words, SLURM will automatically save all text output from your program into a file called `myjob_%A.out` with `%A` replaced with the job number assigned to tis job, which will be saved in the same folder in which this script was executed. For example, if your MATLAB script `script.m` is iteratively optimizing some objective function and spitting out the value of the objective function every 10 iterations, this text output from MATLAB will be saved into the `.out` file SLURM saves for you. More importantly, if MATLAB encounters an error and your job stops because of it, you can look at the `.out` file to see what the error message from MATLAB was.
 3. `time`: specifies maximum amount of time you want SLURM to allow your job to run for. In this example, I have chosen 0 days, 12 hours, and 0 minutes. The longer amount of time you put here, the lower down the queue your job is going to be placed, since SLURM gives priority to shorter jobs.
 4. `nodes`: specifies how many nodes to allocate to this job. Usually this will be set to 1, but if you are running things in parallel (e.g. using a `parfor` loop in MATLAB), you will want more (see below). I think the maximum you can set this to is 20 on the Gatsby cluster.
-5. `cpus-per-task`: specifies how many CPUs in this node to use. It turns out each node has many CPUs. I don't think you would ever set this to anything other than 1 unless you were running things in parallel (see [below](## Parallel computing with MATLAB)).
+5. `cpus-per-task`: specifies how many CPUs in this node to use. It turns out each node has many CPUs. I don't think you would ever set this to anything other than 1 unless you were running things in parallel (see [below](#parallel)).
 6. `mem`: specifies the maximum amount of memory to be allocated to this job, in MB. Again, the larger you set this, the lower down in the queue your job will go (SLURM gives priority to shorter and cheaper jobs). In this example, I have chosen 1000MB = 1GB. In general I think there is no point in using less than this.
 7. `partition`: the Gatsby cluster is a collection of nodes that are separated into two different "partitions": `compute` and `wrkstn`. Partition `compute` consists of a bunch of CPUs on some server. The `wrkstn` partition, on the other hand, consists of the CPUs on every desktop computer at Gatsby - when these aren't being used, one can run jobs on them through SLURM by setting `partition=wrkstn`. SLURM will automatically detect when they are not being used and allocate jobs appropriately.
 8. The next line after all the SLURM specifications just changes directory to the folder in which your code is in.
@@ -78,7 +78,7 @@ sbatch --array=1-100 jobarray.sbatch
 
 ````
 
-## Parallel computing with MATLAB
+## Parallel computing with MATLAB <a name="parallel"></a>
 
 If you're using the Parralel Computing Toolbox in MATLAB (e.g. if you're using `parfor`), your job submission script will look slightly different:
 ````
