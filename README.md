@@ -38,12 +38,12 @@ Here's what it does, in order of each line of the code:
 1. `job-name`: specifies the name under which the job will appear labelled in the queue (which can be viewed at any time using `squeue`)
 2. `output`: specifies the name of the output file containing the text output from your program. In other words, SLURM will automatically save all text output from your program into a file called `myjob_%A.out` with `%A` replaced with the job number assigned to tis job, which will be saved in the same folder in which this script was executed. For example, if your MATLAB script `script.m` is iteratively optimizing some objective function and spitting out the value of the objective function every 10 iterations, this text output from MATLAB will be saved into the `.out` file SLURM saves for you. More importantly, if MATLAB encounters an error and your job stops because of it, you can look at the `.out` file to see what the error message from MATLAB was.
 3. `time`: specifies maximum amount of time you want SLURM to allow your job to run for. In this example, I have chosen 0 days, 12 hours, and 0 minutes. The longer amount of time you put here, the lower down the queue your job is going to be placed, since SLURM gives priority to shorter jobs.
-4. `nodes`: specifies how many nodes to allocate to this job. Usually this will be set to 1, but if you are running things in parallel (e.g. using a `parfor` loop in MATLAB), you will want more (see below). I think the maximum you can set this to is 20 on the Gatsby cluster.
-5. `cpus-per-task`: specifies how many CPUs in this node to use. It turns out each node has many CPUs. I don't think you would ever set this to anything other than 1 unless you were running things in parallel (see [below](#parallel)).
+4. `nodes`: specifies how many nodes to allocate to this job. Usually this will be set to 1, but if you are running things in parallel (e.g. using a `parfor` loop in MATLAB), you will want more (see [below](#parallel)).
+5. `cpus-per-task`: specifies how many CPUs in this node to use. It turns out each node has many CPUs. I don't think you would ever set this to anything other than 1 unless you were running things in parallel (see [below](#parallel)). I think the maximum you can set this to is 20 on the Gatsby cluster.
 6. `mem`: specifies the maximum amount of memory to be allocated to this job, in MB. Again, the larger you set this, the lower down in the queue your job will go (SLURM gives priority to shorter and cheaper jobs). In this example, I have chosen 1000MB = 1GB. In general I think there is no point in using less than this.
 7. `partition`: the Gatsby cluster is a collection of nodes that are separated into two different "partitions": `compute` and `wrkstn`. Partition `compute` consists of a bunch of CPUs on some server. The `wrkstn` partition, on the other hand, consists of the CPUs on every desktop computer at Gatsby - when these aren't being used, one can run jobs on them through SLURM by setting `partition=wrkstn`. SLURM will automatically detect when they are not being used and allocate jobs appropriately.
 8. The next line after all the SLURM specifications just changes directory to the folder in which your code is in.
-9. The last line executes your MATLAB script by using the SLURM command srun, followed by specifications of number of nodes `-n` and cores `-c` to use (I don't know what the difference between node and core is), the location of MATLAB on the Gatsby network (`/opt/matlab-version/bin/matlab`), a couple of options (`-nosplash` `-nodesktop` `-singleCompThread`) for how to open MATLAB, and finally the MATLAB code to actually be run (`script; exit`) in quotations
+9. The last line executes your MATLAB script by using the SLURM command srun, followed by specifications of number of nodes `-n` and CPUs `-c` to use (these should match up with the `--nodes` and `--cpus-per-task` options above), the location of MATLAB on the Gatsby network (`/opt/matlab-version/bin/matlab`), a couple of options (`-nosplash` `-nodesktop` `-singleCompThread`) for how to open MATLAB, and finally the MATLAB code to actually be run (`script; exit`) in quotations
 
 To execute this script so that SLURM recognizes it and submits this job to the queue, save it as e.g. `submit_job.sbatch` and then use
 ````
@@ -80,21 +80,26 @@ sbatch --array=1-100 jobarray.sbatch
 
 ## Parallel computing with MATLAB <a name="parallel"></a>
 
-If you're using the Parralel Computing Toolbox in MATLAB (e.g. if you're using `parfor`), your job submission script will look slightly different:
+If you're using the Parralel Computing Toolbox in MATLAB (e.g. if you're using `parfor`), your job submission script will look slightly different. Namely, you will want to 
+1. set the `--cpus-per-task` to the number of parallel "workers" you want to use (presumably the maximum possible, which I think is 20 on the Gatsby cluster), and accordingly change the `-c` option when calling MATLAB
+2. remove the `-singleCompThread` option when calling MATLAB
+So it will look something like this:
 ````
 #!/bin/bash
 #SBATCH --job-name=myjob
 #SBATCH --output=myjob_%A.out
 #SBATCH --time=0-12:00
 #SBATCH --nodes=1
-#SBATCH --cpus-per-task=1
+#SBATCH --cpus-per-task=20
 #SBATCH --mem=1000
 #SBATCH --partition=compute
 
 cd /nfs/nhome/live/myhome/myfolder/
-srun -n 1 -c 1 /opt/matlab-R2014a/bin/matlab -nosplash -nodesktop -singleCompThread -r "script; exit"
+srun -n 1 -c 20 /opt/matlab-R2014a/bin/matlab -nosplash -nodesktop -r "script; exit"
 ````
+for a MATLAB script `~/myhome/myfolder/script.m` that uses parallel computing.
 
+You also need to make sure that in your MATLAB script you open a parpool with the same number of workers as the `--cpus-per-task` setting.
 
 ## Submitting to SWC cluster
 Need to be careful about a [few things](https://wiki.ucl.ac.uk/display/SSC/Matlab) with MATLAB. Also, you need to specify the partition, and the location of MATLAB.
