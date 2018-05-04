@@ -103,3 +103,40 @@ You also need to make sure that in your MATLAB script you open a parpool with th
 
 ## Submitting to SWC cluster
 Need to be careful about a [few things](https://wiki.ucl.ac.uk/display/SSC/Matlab) with MATLAB. Also, you need to specify the partition, and the location of MATLAB.
+
+## Accessing the Gatsby cluster
+To access the Gatsby cluster, you need to get into the Gatsby network. You can do this by establishing a remote connection using a protocol called SSH. This requires a series of simple steps:
+1. Open the ‘Terminal’ app on your mac and run the following command:
+  ````
+  ssh user@gatsby.ucl.ac.uk
+  ````
+  where `user` is you Gatsby username. The terminal window will then ask for a password.
+2. Once you have done that, you will be in the Gatsby network. The next step is to connect into a desktop computer (you can't submit to the Gatsby cluster if you're not on one of the computers in the network), again using SSH by 
+running
+  ````
+  ssh u123b
+  ````
+  where u123b is the ID of the desktop computer. Again you will be asked for a password, which should be the same as above.
+3. This will take you to `user`'s home folder. At this point, I always run the following command:
+  ````
+  bash
+  ````
+  because this turns on autocompletion and all kinds of nice things. Just do it, it won’t make a difference to anything else.
+4. Now that you are in the home folder, go to the folder where your `.sbatch` script is to submit your jobs:
+  ````
+  cd ~/myfolder/
+  ````
+  where cd is the linux command to **c**hange **d**irectory. 
+5. Finally, submit your jobs with `sbatch` as described above. You can check the progress of any of your jobs by simply running the command
+  ````
+  squeue
+  ````
+  and looking for your job in the queue. The queue will tell you whether or not the job is running (the column headed `ST`, for state: `R` = running, `PD` = pending) and if it is how long it has been running for.
+  
+  ## Downloading your data
+  If a job has completed and saved some data on your Gatsby machine, you can download this onto your personal computer using the command
+  ````
+  scp user@gatsby.ucl.ac.uk:~/myfolder/datafile.mat ~/localpath/
+  ````
+  where `user` is your Gatsby username, `myfolder/` is the folder in which the data is in, `datafile.mat` is the name of the data file you want to download, and `~/localpath/` is the path to the folder on your personal computer to which you want to download the data file. You'll be asked for the password and that's that.
+  
