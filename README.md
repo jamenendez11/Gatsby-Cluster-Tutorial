@@ -111,22 +111,26 @@ To access the Gatsby cluster, you need to get into the Gatsby network. You can d
   ssh user@gatsby.ucl.ac.uk
   ````
   where `user` is you Gatsby username. The terminal window will then ask for a password.
+
 2. Once you have done that, you will be in the Gatsby network. The next step is to connect into a desktop computer (you can't submit to the Gatsby cluster if you're not on one of the computers in the network), again using SSH by 
 running
   ````
   ssh u123b
   ````
   where u123b is the ID of the desktop computer. Again you will be asked for a password, which should be the same as above.
+
 3. This will take you to `user`'s home folder. At this point, I always run the following command:
   ````
   bash
   ````
   because this turns on autocompletion and all kinds of nice things. Just do it, it won’t make a difference to anything else.
+
 4. Now that you are in the home folder, go to the folder where your `.sbatch` script is to submit your jobs:
   ````
   cd ~/myfolder/
   ````
   where cd is the linux command to **c**hange **d**irectory. 
+
 5. Finally, submit your jobs with `sbatch` as described above. You can check the progress of any of your jobs by simply running the command
   ````
   squeue
