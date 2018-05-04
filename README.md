@@ -136,11 +136,15 @@ running
   squeue
   ````
   and looking for your job in the queue. The queue will tell you whether or not the job is running (the column headed `ST`, for state: `R` = running, `PD` = pending) and if it is how long it has been running for.
-  
-  ## Downloading your data
-  If a job has completed and saved some data on your Gatsby machine, you can download this onto your personal computer using the command
-  ````
-  scp user@gatsby.ucl.ac.uk:~/myfolder/datafile.mat ~/localpath/
-  ````
-  where `user` is your Gatsby username, `myfolder/` is the folder in which the data is in, `datafile.mat` is the name of the data file you want to download, and `~/localpath/` is the path to the folder on your personal computer to which you want to download the data file. You'll be asked for the password and that's that.
-  
+
+## Downloading your data
+If a job has completed and saved some data on your Gatsby machine, you can download this onto your personal computer using the command
+````
+scp user@gatsby.ucl.ac.uk:~/myfolder/datafile.mat ~/localpath/
+````
+where `user` is your Gatsby username, `myfolder/` is the folder in which the data is in, `datafile.mat` is the name of the data file you want to download, and `~/localpath/` is the path to the folder on your personal computer to which you want to download the data file. You'll be asked for the password and that's that.
+
+If you want to download a whole folder of data files, however, you have to use the "recursive" option `-r`:
+````
+scp -r user@gatsby.ucl.ac.uk:~/myfolderofdata/ ~/localpath/
+````
