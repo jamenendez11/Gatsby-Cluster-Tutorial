@@ -104,8 +104,8 @@ You also need to make sure that in your MATLAB script you open a parpool with th
 ## Submitting to SWC cluster
 Need to be careful about a [few things](https://wiki.ucl.ac.uk/display/SSC/Matlab) with MATLAB. Also, you need to specify the partition, and the location of MATLAB.
 
-## Accessing the Gatsby cluster
-To access the Gatsby cluster, you need to get into the Gatsby network. You can do this by establishing a remote connection using a protocol called SSH. This requires a series of simple steps:
+## Accessing the Gatsby cluster remotely
+To access the Gatsby cluster from your personal computer, you need to get into the Gatsby network. You can do this by establishing a remote connection using a protocol called SSH. This requires a series of simple steps:
 1. Open the ‘Terminal’ app on your mac and run the following command:
   ````
   ssh user@gatsby.ucl.ac.uk
@@ -119,19 +119,11 @@ running
   ````
   where u123b is the ID of the desktop computer. Again you will be asked for a password, which should be the same as above.
 
-3. This will take you to `user`'s home folder. At this point, I always run the following command:
-  ````
-  bash
-  ````
-  because this turns on autocompletion and all kinds of nice things. Just do it, it won’t make a difference to anything else.
-
-4. Now that you are in the home folder, go to the folder where your `.sbatch` script is to submit your jobs:
+3. This will take you to `user`'s home folder. Now all you need to do is go to the folder where your `.sbatch` script is to submit your jobs:
   ````
   cd ~/myfolder/
   ````
-  where cd is the linux command to **c**hange **d**irectory. 
-
-5. Finally, submit your jobs with `sbatch` as described above. You can check the progress of any of your jobs by simply running the command
+  where cd is the linux command to **c**hange **d**irectory. Then, submit your jobs with `sbatch` as described above. You can check the progress of any of your jobs by simply running the command
   ````
   squeue
   ````
