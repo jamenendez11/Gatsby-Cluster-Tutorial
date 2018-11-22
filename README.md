@@ -2,9 +2,9 @@ This is a tutorial for submitting jobs to Gatsby cluster with SLURM
 
 # How to submit jobs to the Gatsby cluster
 
-The Gatsby cluster is essentially a bunch of computers (called "**nodes**") hooked up together in a kind of network. This is useful because when people have to run many simulations, for example, they can parallelize and run each simulation on a different node in the cluster.
+The Gatsby cluster is essentially a bunch of computers (called "**nodes**") hooked up together in a network. This is useful because when you need to run many simulations, for example, you can parallelize and run each simulation on a different node in the cluster.
 
-The first practical problem is that many different people may want to run different programs ("**jobs**") at the same time. To make sure two people don't try to run two different programs on the same "node", the Gatsby cluster, like any other functional computing cluster, has a **job scheduler**, which does exactly what it sounds like: it schedules different jobs from different users. This means making sure to allocate each job to a different node and, if all the nodes are being used, putting any extra jobs that can't currently be run in a **queue** so that they are sequentially allocated to different nodes in some useful way (e.g. run all the short jobs first, then run all the long ones).
+The first practical problem is that many different people may want to run different programs ("**jobs**") at the same time. To make sure two people don't try to run two different programs on the same "node", the cluster uses a **job scheduler**, which does exactly what it sounds like: it schedules different jobs from different users. This means making sure to allocate each job to a different node and, if all the nodes are being used, putting any extra jobs that can't currently be run in a **queue** so that they are sequentially allocated to different nodes in some useful way (e.g. run all the short jobs first, then run all the long ones).
 
 The job scheduler that Gatsby uses is called SLURM. This is a pretty widely used scheduler that has extensive [documentation](https://slurm.schedmd.com/documentation.html). Like any other job scheduler, SLURM requires that you **submit** jobs to the queue in a particular way. Learning this is basically all there is to it.
 
