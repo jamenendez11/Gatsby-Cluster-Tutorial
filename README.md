@@ -8,10 +8,19 @@ The first practical problem is that many different people may want to run differ
 
 The job scheduler that Gatsby uses is called SLURM. This is a pretty widely used scheduler that has extensive [documentation](https://slurm.schedmd.com/documentation.html). Like any other job scheduler, SLURM requires that you **submit** jobs to the queue in a particular way. Learning this is basically all there is to it.
 
-[Table of Contents]
+**TABLE OF CONTENTS**
+1. [Useful SLURM commands](#useful)
+..1. [Submitting jobs](#submit)
+    * [Default settings](#default)
+    * [Scripts with arguments](#arguments)
+    * [Job arrays](#arrays)
+..1. [Details](#details)
+    * [Python](#python)
+    * [MATLAB](#matlab)
+    * [Parallel computing with MATLAB](#parallel)
 
 
-## Useful SLURM commands
+## Useful SLURM commands <a name="useful"></a>
 
 * `squeue`: shows you the current queue, i.e. the jobs currently running and which nodes they are running on, and the jobs not yet running but on the queue
 * `scancel`: remove a job from the queue, or cancel a job that is currently running. If the job number is `1234`, cancel it with `scancel 1234`. To cancel all the jobs submitted by user `myname`, use `scancel -u myname`.
@@ -22,12 +31,14 @@ The job scheduler that Gatsby uses is called SLURM. This is a pretty widely used
   See the above link to get the meaning of each of these fields.
 
 
-## Submitting jobs
+## Submitting jobs <a name="submit"></a>
 
 Submitting a job has two steps:
 1. Write a job submission script, which
-    a. specifies the settings for your job, using `#SBATCH` commands
-    b. specifies the script that you want this job to run
+    <ol type="a">
+      <li>specifies the settings for your job, using `#SBATCH` commands</li>
+      <li>specifies the script that you want this job to run</li>
+    </ol>
 2. Submit the job using the `sbatch` command
 Step 2 is straight-forward: given a job submission script called `submit_job.sbatch`, the job is submitted via
 ````
@@ -60,7 +71,7 @@ Here's what it does, in order of each line of the code:
 8. The next line after all the SLURM specifications just changes directory to the folder in which your code is in.
 9. The last line executes your script by using the SLURM command `srun` followed by the necessary code for running the script (see [below](#details)).
 
-### Default settings
+### Default settings <a name="default"></a>
 
 These are the default settings I use, for no real reason other than empirical success:
 ````
@@ -69,7 +80,7 @@ These are the default settings I use, for no real reason other than empirical su
 #SBATCH --mem=3G
 ````
 
-### Scripts with arguments
+### Scripts with arguments <a name="arguments"></a>
 
 Sometimes (or always) you might want to submit a job that requires running a script that takes some arguments. This can be accomodated as follows:
 1. When using `sbatch`, use the `--export` option to define some variables, e.g. `ALPHA` and `BETA` via
@@ -85,7 +96,7 @@ A few notes:
 * In step 1, note that we start with `--export=ALL` before defining any variables. This is the default setting of the `--export` option, which forces all variables in your current workspace to be passed on to the environment in which the script is executed. You almost always want this to happen (e.g. if you are in a virtual environment), so don't forget to include this!
 * In step 2, make sure to use the `$` sign at the start of each variable name. Otherwise, `ALPHA` and `BETA` will be treated as commands rather than variables.
 
-### Job arrays
+### Job arrays <a name="arrays"></a>
 
 Sometimes (or always) you want to run the same script 100s or 1000s of times. Nothing above prevents you from doing this, but SLURM has a built-in elegant way of doing this, called **job arrays**. Job arrays are run using `sbatch` the usual way, but with the additional use of the `--array` option, e.g.
 ````
@@ -107,12 +118,12 @@ srun python -u script.py ${SLURM_ARRAY_TASK_ID}
 
 ## Details <a name="details"></a>
 
-### Python
+### Python <a name="python"></a>
 
 * Note that above I always included the `-u` option to `python` when running a Python script. In my experience, I found that none of the text output from my script got saved into the `.out` file if I didn't include this option. This may have been fixed.
 * Using **virtual environments**: this is easily accomodated by either activating the virtual environment before submitting the job, i.e. before running `sbatch`, or by activating it within the job submission script before the line executing `srun`.
 
-### MATLAB
+### MATLAB <a name="matlab"></a>
 
 I haven't used MATLAB in a while, but at least back when I did use it you had to specify some additional options for running a MATLAB script with `srun`. Here is an example:
 ```
