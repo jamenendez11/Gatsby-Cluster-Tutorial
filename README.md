@@ -10,11 +10,11 @@ The job scheduler that Gatsby uses is called SLURM. This is a pretty widely used
 
 **TABLE OF CONTENTS**
 1. [Useful SLURM commands](#useful)
-..1. [Submitting jobs](#submit)
+2. [Submitting jobs](#submit)
     * [Default settings](#default)
     * [Scripts with arguments](#arguments)
     * [Job arrays](#arrays)
-..1. [Details](#details)
+3. [Details](#details)
     * [Python](#python)
     * [MATLAB](#matlab)
     * [Parallel computing with MATLAB](#parallel)
@@ -35,10 +35,8 @@ The job scheduler that Gatsby uses is called SLURM. This is a pretty widely used
 
 Submitting a job has two steps:
 1. Write a job submission script, which
-    <ol type="a">
-      <li>specifies the settings for your job, using `#SBATCH` commands</li>
-      <li>specifies the script that you want this job to run</li>
-    </ol>
+    * specifies the settings for your job, using `#SBATCH` commands
+    * specifies the script that you want this job to run
 2. Submit the job using the `sbatch` command
 Step 2 is straight-forward: given a job submission script called `submit_job.sbatch`, the job is submitted via
 ````
