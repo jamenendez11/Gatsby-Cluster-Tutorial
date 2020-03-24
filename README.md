@@ -38,6 +38,7 @@ Submitting a job has two steps:
     * specifies the settings for your job, using `#SBATCH` commands
     * specifies the script that you want this job to run
 2. Submit the job using the `sbatch` command
+
 Step 2 is straight-forward: given a job submission script called `submit_job.sbatch`, the job is submitted via
 ````
 sbatch submit_job.sbatch
