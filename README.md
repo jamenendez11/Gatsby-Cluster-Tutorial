@@ -122,7 +122,7 @@ A few notes:
 
 ### MATLAB <a name="matlab"></a>
 
-I haven't used MATLAB in a while, but at least back when I did use it you had to specify some additional options for running a MATLAB script with `srun`. Here is an example:
+I haven't used MATLAB in a while, but back when I did use it you had to specify some additional options for running a MATLAB script with `srun`. Here is an example:
 ```
 srun /opt/matlab-R2014a/bin/matlab -nosplash -nodesktop -singleCompThread -r "script; exit"
 ```
@@ -136,4 +136,5 @@ A few notes:
 If you're using the Parralel Computing Toolbox in MATLAB (e.g. if you're using `parfor`), your job submission script will look slightly different. Namely, you will want to 
 1. set the `--cpus-per-task` to the number of parallel "workers" you want to use (presumably the maximum possible, which I think is 20 on the Gatsby cluster)
 2. remove the `-singleCompThread` option when calling MATLAB
+
 Note that you need to make sure that in your MATLAB script you open a parpool with the same number of workers as the `--cpus-per-task` setting.
