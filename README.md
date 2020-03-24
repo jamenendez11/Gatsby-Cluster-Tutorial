@@ -107,7 +107,6 @@ A few notes:
 * You can specify how each of these replications gets named by using the `--output` option as above, but now `%A` representing the number of the whole job *array* and `%a` representing the job number within the array, e.g.
 
         #SBATCH --output=myjob_%A_%a.out
-
 where `%a` would take on a value between 1 and 1000 in the example shown here.
 * Sometimes, you might want to use the job number as an argument to your script. For example, you might want each of the 1000 job submissions to run the same function but with a different setting of a particular parameter. You might then provide the job number as an argument, and inside the function use this number to index the corresponding parameter value. This job number is saved as a variable called `SLURM_ARRAY_TASK_ID`, which can be passed as an argument to your script (along with any other arugments) as follows:
 
